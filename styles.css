@@ -399,23 +399,12 @@ h2 { font-size: clamp(26px, 3.6vw, 44px); max-width: 14em; }
 
 @media (max-width: 960px) { .cards { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 640px) {
-  /* phones: a swipeable row that snaps card to card, bleeding into the gutters */
-  .cards {
-    display: flex;
-    gap: 16px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    margin: 0 calc(-1 * var(--gutter));
-    padding: 12px var(--gutter) 20px;
-    scrollbar-width: none;
-  }
-  .cards::-webkit-scrollbar { display: none; }
-  .cards .polaroid {
-    flex: 0 0 min(72vw, 300px);
-    scroll-snap-align: start;
-  }
-  .cards .polaroid:nth-child(n) { transform: rotate(0); }
+  /* phones: back to a vertical stack, just smaller polaroids */
+  .cards { grid-template-columns: 1fr; max-width: 280px; margin-left: 0; gap: 20px; }
+  .polaroid { padding: 8px 8px 14px; }
+  .photo { font-size: 44px; margin-bottom: 10px; }
+  .polaroid h3 { font-size: 15px; }
+  .polaroid p { font-size: 13px; }
 }
 
 /* join */
