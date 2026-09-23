@@ -231,18 +231,15 @@ h2 { font-size: clamp(26px, 3.6vw, 44px); max-width: 14em; }
   margin: 0 auto;
   padding: clamp(56px, 9vw, 120px) 0 clamp(48px, 7vw, 90px);
 }
-/* The "p" of Spectra sits on the page's left edge and the S hangs into the
-   margin. The p begins 13.15% into the logo. The overhang is capped at the
-   free space left of the content column (--left), so the S is never clipped
-   on narrower screens; when it is capped, the p shifts right by the shortfall
-   and Courant follows it, so the two always share an edge. */
-.hero-copy {
-  --logo-w: min(100%, 1000px);
-  --p-in: calc(var(--logo-w) * 0.1315);                       /* p's offset inside the logo */
-  --left: max(var(--gutter), calc((100vw - 16px - var(--max)) / 2)); /* room beside the column */
-  --ov: min(var(--p-in), calc(var(--left) - 12px));            /* how far the S may overhang, 12px shy of the screen edge */
-  --p-x: calc(var(--p-in) - var(--ov));                        /* where the p lands, from the column edge */
-}
+/* Two alignments for the logos, and they never change size between them:
+   - wide screens (>= 1410px): the S hangs into the margin so the "p" of
+     Spectra sits on the content edge with Courant, the stripe and the text.
+     The p begins 13.15% into the logo, and at this width the free margin
+     beside the content column is at least that wide, so nothing is clipped.
+   - anything narrower: alignment A. No overhang; the S sits on the content
+     edge and Courant stacks flush left beneath it. */
+.hero-copy { --logo-w: min(100%, 1000px); --ov: 0px; }
+@media (min-width: 1410px) { .hero-copy { --ov: calc(var(--logo-w) * 0.1315); } }
 .hero-logo {
   width: var(--logo-w);
   margin: 0 0 22px calc(-1 * var(--ov));
@@ -257,14 +254,9 @@ h2 { font-size: clamp(26px, 3.6vw, 44px); max-width: 14em; }
   -webkit-touch-callout: none;
 }
 .hero-courant {
-  width: min(320px, calc(100% - var(--p-x)));
+  width: min(320px, 100%);
   height: auto;
-  margin: 0 0 8px var(--p-x);
-}
-@media (max-width: 760px) {
-  /* phones: no overhang, and the logos simply stack on the left edge */
-  .hero-copy { --left: 0px; }
-  .hero-courant { margin-left: 0; width: min(320px, 100%); }
+  margin: 0 0 8px;
 }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
 
@@ -371,29 +363,29 @@ h2 { font-size: clamp(26px, 3.6vw, 44px); max-width: 14em; }
 .cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 28px;
+  gap: 24px;
   padding: 12px 0;
 }
 .polaroid {
   background: var(--surface);
   display: block;
   border: 1px solid var(--line);
-  padding: 12px 12px 22px;
+  padding: 10px 10px 18px;
   box-shadow: var(--shadow);
   transition: transform .25s ease, box-shadow .25s ease;
 }
 .cards .polaroid:nth-child(1) { transform: rotate(-1.6deg); }
-.cards .polaroid:nth-child(2) { transform: rotate(1.2deg) translateY(10px); }
+.cards .polaroid:nth-child(2) { transform: rotate(1.2deg) translateY(8px); }
 .cards .polaroid:nth-child(3) { transform: rotate(-0.8deg); }
-.cards .polaroid:nth-child(4) { transform: rotate(1.8deg) translateY(6px); }
+.cards .polaroid:nth-child(4) { transform: rotate(1.8deg) translateY(5px); }
 .cards .polaroid:hover { transform: rotate(0) translateY(-4px); box-shadow: 0 2px 4px rgba(0,0,0,.06), 0 24px 40px -18px rgba(0,0,0,.28); z-index: 1; position: relative; }
 
 .photo {
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 4 / 3;
   display: grid; place-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   font-family: var(--font-display); font-weight: 500;
-  font-size: 72px; color: var(--ink);
+  font-size: 56px; color: var(--ink);
   background: var(--bg-2);
 }
 /* each "photo" is a soft wash of one band of the pride gradient */
@@ -402,11 +394,29 @@ h2 { font-size: clamp(26px, 3.6vw, 44px); max-width: 14em; }
 .photo-3 { background: linear-gradient(135deg, #e9f9ee, #d9f4e2); }
 .photo-4 { background: linear-gradient(135deg, #eaf2ff, #efe6ff); }
 
-.polaroid h3 { font-family: var(--font-display); font-weight: 600; font-size: 17px; margin: 0 4px 6px; }
-.polaroid p { margin: 0 4px; color: var(--ink-2); font-size: 14px; line-height: 1.5; }
+.polaroid h3 { font-family: var(--font-display); font-weight: 600; font-size: 16px; margin: 0 4px 4px; }
+.polaroid p { margin: 0 4px; color: var(--ink-2); font-size: 13.5px; line-height: 1.45; }
 
 @media (max-width: 960px) { .cards { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 520px) { .cards { grid-template-columns: 1fr; max-width: 360px; } }
+@media (max-width: 640px) {
+  /* phones: a swipeable row that snaps card to card, bleeding into the gutters */
+  .cards {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 calc(-1 * var(--gutter));
+    padding: 12px var(--gutter) 20px;
+    scrollbar-width: none;
+  }
+  .cards::-webkit-scrollbar { display: none; }
+  .cards .polaroid {
+    flex: 0 0 min(72vw, 300px);
+    scroll-snap-align: start;
+  }
+  .cards .polaroid:nth-child(n) { transform: rotate(0); }
+}
 
 /* join */
 
