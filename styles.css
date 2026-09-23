@@ -231,13 +231,21 @@ h2 { font-size: clamp(26px, 3.6vw, 44px); max-width: 14em; }
   margin: 0 auto;
   padding: clamp(56px, 9vw, 120px) 0 clamp(48px, 7vw, 90px);
 }
-/* The "p" of Spectra sits on the page's left edge; the S hangs out into the
-   margin. The p begins 13.15% into the logo, so the logo is pulled left by that.
-   Width is set on the h1 (percent = content column), and the img fills it. */
-.hero-logo {
+/* The "p" of Spectra sits on the page's left edge and the S hangs into the
+   margin. The p begins 13.15% into the logo. The overhang is capped at the
+   free space left of the content column (--left), so the S is never clipped
+   on narrower screens; when it is capped, the p shifts right by the shortfall
+   and Courant follows it, so the two always share an edge. */
+.hero-copy {
   --logo-w: min(100%, 1000px);
+  --p-in: calc(var(--logo-w) * 0.1315);                       /* p's offset inside the logo */
+  --left: max(var(--gutter), calc((100vw - 16px - var(--max)) / 2)); /* room beside the column */
+  --ov: min(var(--p-in), calc(var(--left) - 12px));            /* how far the S may overhang, 12px shy of the screen edge */
+  --p-x: calc(var(--p-in) - var(--ov));                        /* where the p lands, from the column edge */
+}
+.hero-logo {
   width: var(--logo-w);
-  margin: 0 0 22px calc(var(--logo-w) * -0.1315);
+  margin: 0 0 22px calc(-1 * var(--ov));
 }
 .hero-logo img { width: 100%; }
 /* logos are decoration, not targets: no clicks, no drag, no right-click save */
@@ -249,15 +257,14 @@ h2 { font-size: clamp(26px, 3.6vw, 44px); max-width: 14em; }
   -webkit-touch-callout: none;
 }
 .hero-courant {
-  width: min(100%, 320px);
+  width: min(320px, calc(100% - var(--p-x)));
   height: auto;
-  margin: 0 0 8px;
+  margin: 0 0 8px var(--p-x);
 }
 @media (max-width: 760px) {
-  /* not enough gutter for the overhang on phones: keep the logo in the column
-     and indent Courant to the p instead */
-  .hero-logo { margin-left: 0; }
-  .hero-courant { margin-left: calc(var(--logo-w, 100%) * 0.1315); }
+  /* phones: no overhang, and the logos simply stack on the left edge */
+  .hero-copy { --left: 0px; }
+  .hero-courant { margin-left: 0; width: min(320px, 100%); }
 }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
 
