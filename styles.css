@@ -393,6 +393,14 @@ h2 { font-size: clamp(26px, 3.6vw, 44px); max-width: 14em; }
 .photo-2 { background: linear-gradient(135deg, #fff8e5, #fff0c2); }
 .photo-3 { background: linear-gradient(135deg, #e9f9ee, #d9f4e2); }
 .photo-4 { background: linear-gradient(135deg, #eaf2ff, #efe6ff); }
+/* the g and f in g ∘ f are set like LaTeX math italics; the ∘ stays upright */
+.tex {
+  font-family: "STIX Two Text", "Latin Modern Math", "Cambria Math", "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.12em;
+  letter-spacing: .02em;
+}
 
 .polaroid h3 { font-family: var(--font-display); font-weight: 600; font-size: 16px; margin: 0 4px 4px; }
 .polaroid p { margin: 0 4px; color: var(--ink-2); font-size: 13.5px; line-height: 1.45; }
