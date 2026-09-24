@@ -400,7 +400,7 @@ h2 { font-size: clamp(26px, 3.6vw, 44px); max-width: 14em; }
 @media (max-width: 960px) { .cards { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 640px) {
   /* phones: back to a vertical stack, just smaller polaroids */
-  .cards { grid-template-columns: 1fr; max-width: 280px; margin-left: 0; gap: 20px; }
+  .cards { grid-template-columns: 1fr; max-width: 280px; margin-left: auto; margin-right: auto; gap: 20px; }
   .polaroid { padding: 8px 8px 14px; }
   .photo { font-size: 44px; margin-bottom: 10px; }
   .polaroid h3 { font-size: 15px; }
